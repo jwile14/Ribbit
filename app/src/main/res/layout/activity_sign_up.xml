@@ -48,4 +48,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signupProgressBar"
+        android:layout_alignTop="@+id/signupButton"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/signupButton"
+        android:layout_alignRight="@+id/signupButton"
+        android:layout_alignLeft="@+id/signupButton"/>
+
 </RelativeLayout>
