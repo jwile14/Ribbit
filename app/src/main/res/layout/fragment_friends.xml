@@ -17,4 +17,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/empty_friends_label"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/friendsFragmentProgressBar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
