@@ -13,6 +13,8 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -29,6 +31,8 @@ import java.util.Locale;
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    protected ProgressBar mProgressBar;
 
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
@@ -192,6 +196,16 @@ public class MainActivity extends ActionBarActivity {
 
             Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
+
+            String fileType;
+            if (requestCode == TAKE_PHOTO_REQUEST || requestCode == CHOOSE_PHOTO_REQUEST) {
+                fileType = ParseConstants.TYPE_IMAGE;
+            } else {
+                fileType = ParseConstants.TYPE_VIDEO;
+            }
+
+            recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
+
             startActivity(recipientsIntent);
         }
         else if(resultCode != RESULT_CANCELED) {
@@ -218,6 +232,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
 
@@ -262,13 +279,16 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_logout:
                 ParseUser.logOut();
                 navigateToLogin();
+                break;
             case R.id.action_edit_friends:
                 Intent intent = new Intent(this, EditFriendsActivity.class);
                 startActivity(intent);
+                break;
             case R.id.action_camera:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setItems(R.array.camera_choices, mDialogListener);
                 builder.create().show();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
