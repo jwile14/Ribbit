@@ -25,6 +25,9 @@ public class SignUpActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         mProgressBar = (ProgressBar) findViewById(R.id.signupProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
 
