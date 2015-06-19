@@ -10,10 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -28,9 +29,10 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import jwile14.com.github.ribbit.R;
+import jwile14.com.github.ribbit.adapters.UserAdapter;
 import jwile14.com.github.ribbit.utils.FileHelper;
 import jwile14.com.github.ribbit.utils.ParseConstants;
-import jwile14.com.github.ribbit.R;
 
 
 public class RecipientsActivity extends ActionBarActivity {
@@ -46,29 +48,44 @@ public class RecipientsActivity extends ActionBarActivity {
     protected Uri mMediaUri;
     protected String mFileType;
 
-    private ListView mListView;
+    private GridView mGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipients);
+        setContentView(R.layout.user_grid);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.recipientsProgressBar);
+        mProgressBar = (ProgressBar) findViewById(R.id.friendsFragmentProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
 
         mMediaUri = getIntent().getData();
         mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
 
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        getListView().setEmptyView(findViewById(android.R.id.empty));
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView = (GridView) findViewById(R.id.friendsGrid);
+
+        TextView emptyTextView = (TextView) findViewById(android.R.id.empty);
+        mGridView.setEmptyView(emptyTextView);
+
+        mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setEmptyView(findViewById(android.R.id.empty));
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(((ListView) parent).getCheckedItemCount() > 0) {
+                if(mGridView.getCheckedItemCount() > 0) {
                     mSendMenuItem.setVisible(true);
                 } else {
                     mSendMenuItem.setVisible(false);
+                }
+
+                ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
+
+                if (mGridView.isItemChecked(position)) {
+                    // Add recipient
+                    checkImageView.setVisibility(View.VISIBLE);
+                } else {
+                    // Remove recipient
+                    checkImageView.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -105,17 +122,6 @@ public class RecipientsActivity extends ActionBarActivity {
         return true;
     }
 
-    protected ListView getListView() {
-        if (mListView == null) {
-            mListView = (ListView) findViewById(android.R.id.list);
-        }
-        return mListView;
-    }
-
-    protected void setListAdapter(ListAdapter adapter) {
-        getListView().setAdapter(adapter);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -141,10 +147,12 @@ public class RecipientsActivity extends ActionBarActivity {
                         usernames[i] = user.getUsername();
                         i++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(),
-                            android.R.layout.simple_list_item_checked,
-                            usernames);
-                    setListAdapter(adapter);
+                    if(mGridView.getAdapter() == null) {
+                        UserAdapter adapter = new UserAdapter(RecipientsActivity.this, mFriends);
+                        mGridView.setAdapter(adapter);
+                    } else {
+                        ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
+                    }
                 } else {
                     Log.e(TAG, e.getMessage());
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
@@ -185,8 +193,8 @@ public class RecipientsActivity extends ActionBarActivity {
     protected ArrayList<String> getRecipientIds() {
         ArrayList<String> recipientIds = new ArrayList<>();
 
-        for(int i = 0; i < getListView().getCount(); i++) {
-            if(getListView().isItemChecked(i)) {
+        for(int i = 0; i < mGridView.getCount(); i++) {
+            if(mGridView.isItemChecked(i)) {
                 recipientIds.add(mFriends.get(i).getObjectId());
             }
         }
