@@ -12,7 +12,7 @@
             app:showAsAction="never"/>
       <item android:id="@+id/action_camera"
             android:title="@string/menu_camera_label"
-            android:icon="@mipmap/ic_action_camera"
+            android:icon="@mipmap/ic_menu_camera"
             android:orderInCategory="100"
             app:showAsAction="always"/>
 </menu>
