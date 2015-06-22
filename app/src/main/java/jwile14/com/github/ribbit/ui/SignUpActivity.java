@@ -14,6 +14,7 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import jwile14.com.github.ribbit.R;
+import jwile14.com.github.ribbit.RibbitApplication;
 
 
 public class SignUpActivity extends ActionBarActivity {
@@ -73,6 +74,8 @@ public class SignUpActivity extends ActionBarActivity {
                             mSignupButton.setText(R.string.sign_up_button_label);
                             if(e == null) {
                                 // Success!
+                                RibbitApplication.updateParseInstallation(ParseUser.getCurrentUser());
+
                                 Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

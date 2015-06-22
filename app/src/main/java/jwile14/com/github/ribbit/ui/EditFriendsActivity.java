@@ -3,6 +3,7 @@ package jwile14.com.github.ribbit.ui;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +42,9 @@ public class EditFriendsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_grid);
+
+        getSupportActionBar().setTitle(Html.fromHtml("<font color='#250054'>Ribbit </font>"));
+
 
         mProgressBar = (ProgressBar) findViewById(R.id.friendsFragmentProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);

@@ -15,6 +15,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import jwile14.com.github.ribbit.R;
+import jwile14.com.github.ribbit.RibbitApplication;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -72,6 +73,8 @@ public class LoginActivity extends ActionBarActivity {
                             mLoginButton.setText(R.string.login_button_label);
                             if (e == null) {
                                 // Success!
+                                RibbitApplication.updateParseInstallation(user);
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
